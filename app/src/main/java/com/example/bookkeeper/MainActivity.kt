@@ -1,13 +1,18 @@
 package com.example.bookkeeper
 
 import android.os.Bundle
+import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_menu_example, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -19,16 +24,16 @@ class MainActivity : AppCompatActivity() {
         ) { tab, position ->
             when (position) {
                 0 -> {
-                    tab.text = "Bookkeep"
+                    tab.text = getString(R.string.bookkeep_tab)
                     tab.setIcon(R.drawable.ic_edit)
                 }
                 1 -> {
-                    tab.text = "Account"
+                    tab.text = getString(R.string.account_tab)
                     tab.setIcon(R.drawable.ic_list)
                 }
                 else -> {
-                    tab.text = "Backup"
-                    tab.setIcon(R.drawable.ic_backup)
+                    tab.text = getString(R.string.chart_tab)
+                    tab.setIcon(R.drawable.ic_chart)
                 }
             }
         }

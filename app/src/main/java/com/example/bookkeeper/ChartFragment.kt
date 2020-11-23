@@ -34,7 +34,7 @@ class BackupFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_backup, container, false)
+        return inflater.inflate(R.layout.fragment_chart, container, false)
     }
 
     companion object {

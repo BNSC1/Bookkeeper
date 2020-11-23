@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".fragments.WelcomeFragment">
+    <item android:id="@+id/account_list"
+        android:icon="@drawable/ic_backup"
+        android:title="@string/backup_menu"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        />
+</menu>
