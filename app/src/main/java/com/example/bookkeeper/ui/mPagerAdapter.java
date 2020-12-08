@@ -1,9 +1,13 @@
-package com.example.bookkeeper;
+package com.example.bookkeeper.ui;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
+
+import com.example.bookkeeper.ui.AccountFragment;
+import com.example.bookkeeper.ui.BackupFragment;
+import com.example.bookkeeper.ui.BookkeepFragment;
 
 public class mPagerAdapter extends FragmentStateAdapter {
     public mPagerAdapter(@NonNull FragmentActivity fragmentActivity) {

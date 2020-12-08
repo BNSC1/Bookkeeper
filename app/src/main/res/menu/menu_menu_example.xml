@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".fragments.WelcomeFragment">
-    <item android:id="@+id/account_list"
-        android:icon="@drawable/ic_backup"
-        android:title="@string/backup_menu"
+    <item android:id="@+id/backup_settings"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/menu_settings"
         android:orderInCategory="100"
         app:showAsAction="always"
         />
