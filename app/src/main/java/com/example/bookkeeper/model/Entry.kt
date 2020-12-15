@@ -9,8 +9,6 @@ import androidx.room.*
 import com.example.bookkeeper.utils.DateConverter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.Date
-import java.*
 import java.time.OffsetDateTime
 
 const val tablename = "EntryBook"
@@ -21,12 +19,12 @@ data class Entry(
     @ColumnInfo val description: String?,
     @ColumnInfo val amount: Int?,
 //    @ColumnInfo val date: Long?,
-    @ColumnInfo val date: OffsetDateTime? = null
+    @ColumnInfo val date: OffsetDateTime?
 )
 
 @Dao
 interface EntryDao {
-    @Query("Select * from `${tablename}` order by date desc")
+    @Query("Select * from `${tablename}` order by date desc, _id desc")
     fun readAllEntry(): LiveData<List<Entry>>
 
     @Query("Select * from `${tablename}` where amount > 0 order by date desc")

@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import com.example.bookkeeper.R
 
 
-class BackupFragment : Fragment() {
+class ChartFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

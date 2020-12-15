@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val viewPager = findViewById<ViewPager2>(R.id.viewPager)
-        viewPager.adapter = mPagerAdapter(this)
+        viewPager.adapter = MyPagerAdapter(this)
         val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
         val tabLayoutMediator = TabLayoutMediator(
             tabLayout, viewPager
@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.backup_settings -> {
-                val intent = Intent(this,SettingsActivity::class.java)
+                val intent = Intent(this, SettingsActivity::class.java)
                 startActivity(intent)
             }
         }
