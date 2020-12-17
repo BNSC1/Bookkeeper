@@ -2,10 +2,12 @@ package com.example.bookkeeper.ui
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -13,6 +15,7 @@ import com.example.bookkeeper.R
 import com.example.bookkeeper.databinding.FragmentBookkeepBinding
 import com.example.bookkeeper.model.Entry
 import com.example.bookkeeper.model.EntryVM
+import kotlinx.android.synthetic.main.fragment_bookkeep.*
 import java.text.SimpleDateFormat
 import java.time.OffsetDateTime
 import java.util.*
@@ -41,6 +44,10 @@ class BookkeepFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setCurrentTime()
 
+        amountET.requestFocus()
+        val imm: InputMethodManager? =
+            requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+        imm!!.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
         binding.dateTV.setOnClickListener {
             val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, day ->
                 cal.set(Calendar.YEAR, year)
@@ -92,13 +99,13 @@ class BookkeepFragment : Fragment() {
             if (binding.amountET.text!!.isEmpty()) {
                 Toast.makeText(
                     requireContext(),
-                    getString(R.string.err_fill_fields),
+                    getString(R.string.msg_entry_unsuccessful),
                     Toast.LENGTH_SHORT
                 ).show()
                 if (binding.amountET.text.isNullOrEmpty()) binding.amountET.error =
-                    getString(R.string.err_required)
+                    getString(R.string.err_invalid)
             } else {
-                val amount = revenueFlag * binding.amountET.text.toString().toInt()
+                val amount = revenueFlag * binding.amountET.text.toString().toLong()
                 val description = binding.descriptionET.text.toString()
                 entryVM.insertEntry(
                     Entry(

@@ -1,6 +1,5 @@
 package com.example.bookkeeper.utils
 
-//import kotlinx.android.synthetic.main.fragment_bookkeep.view.*
 import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater

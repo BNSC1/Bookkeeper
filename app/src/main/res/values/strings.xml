@@ -16,9 +16,12 @@
     <string name="hint_time">Time</string>
     <string name="item_expense">Expense(-)</string>
     <string name="item_revenue">Revenue(+)</string>
-    <string name="err_fill_fields">Please fill in required fields.</string>
-    <string name="err_required">Required</string>
+    <string name="err_invalid">Invalid</string>
+    <string name="msg_entry_unsuccessful">Please check marked fields.</string>
     <string name="msg_entry_successful">Added entry</string>
+
+    <!--Account Fragment-->
+    <string name="msg_balance">Balance: %1$s</string>
 
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>

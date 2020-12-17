@@ -17,7 +17,7 @@ const val tablename = "EntryBook"
 data class Entry(
     @PrimaryKey(autoGenerate = true) val _id: Int = 0,
     @ColumnInfo val description: String?,
-    @ColumnInfo val amount: Int?,
+    @ColumnInfo val amount: Long?,
 //    @ColumnInfo val date: Long?,
     @ColumnInfo val date: OffsetDateTime?
 )
@@ -32,6 +32,9 @@ interface EntryDao {
 
     @Query("Select * from `${tablename}` where amount < 0 order by date desc")
     fun readAllExpense(): LiveData<List<Entry>>
+
+    @Query("Select TOTAL(amount) from `${tablename}`")
+    fun readBalance(): LiveData<Long>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertEntry(entry: Entry)
@@ -68,8 +71,9 @@ abstract class EntryDB : RoomDatabase() {
 class EntryRepository(private val accountDao: EntryDao) {
 
     val readAllEntry: LiveData<List<Entry>> = accountDao.readAllEntry()
-    val readAllRevenue: LiveData<List<Entry>> = accountDao.readAllRevenue()
-    val readAllExpense: LiveData<List<Entry>> = accountDao.readAllExpense()
+//    val readAllRevenue: LiveData<List<Entry>> = accountDao.readAllRevenue()
+//    val readAllExpense: LiveData<List<Entry>> = accountDao.readAllExpense()
+    val readBalance: LiveData<Long> = accountDao.readBalance()
 //    fun readEntry(accountname: String, password: String): LiveData<List<Entry>> {
 //        return accountDao.readEntry(accountname, password)
 //    }
@@ -86,12 +90,14 @@ class EntryRepository(private val accountDao: EntryDao) {
 class EntryVM(application: Application) : AndroidViewModel(application) {
 
     val readAllEntry: LiveData<List<Entry>>
+    val readBalance: LiveData<Long>
     private val repository: EntryRepository
 
     init {
         val userDao = EntryDB.getDB(application).entryDao()
         repository = EntryRepository(userDao)
         readAllEntry = repository.readAllEntry
+        readBalance = repository.readBalance
     }
 
 //    fun readEntry(accountname: String, password: String): LiveData<List<Entry>> {
