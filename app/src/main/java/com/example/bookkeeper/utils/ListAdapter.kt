@@ -12,7 +12,6 @@ import com.example.bookkeeper.R
 import com.example.bookkeeper.model.Entry
 import com.example.bookkeeper.model.EntryVM
 import kotlinx.android.synthetic.main.list_item.view.*
-import java.text.DecimalFormat
 
 //class ListAdapter(
 //    itemList: LiveData<List<Entry>>,
@@ -23,8 +22,10 @@ class ListAdapter(
 ) :
     RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
     private var entryList = emptyList<Entry>()
+    private lateinit var moneyFormatHelper: MoneyFormatHelper
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+        moneyFormatHelper = MoneyFormatHelper(parent.context)
         return MyViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
         )
@@ -34,8 +35,8 @@ class ListAdapter(
     inner class MyViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView),
         View.OnClickListener {
-        val delImgBtn = itemView.findViewById<ImageButton>(R.id.deleteBTN)!!
-        val viewItem = itemView.findViewById<ConstraintLayout>(R.id.constraintlayout)!!
+        val delImgBtn: ImageButton = itemView.findViewById(R.id.deleteBTN)
+        val viewItem: ConstraintLayout = itemView.findViewById(R.id.constraintlayout)
         override fun onClick(v: View?) {
         }
 
@@ -50,8 +51,8 @@ class ListAdapter(
         val currentItem = entryList[position]
         Log.d("[TEST]", currentItem.date.toString())
         holder.itemView.descriptionTV.text = currentItem.description
-        holder.itemView.amountTV.text = DecimalFormat("$#,###").format(currentItem.amount)
-        if (currentItem.amount!! > 0) {
+        holder.itemView.amountTV.text = moneyFormatHelper.getPrefMoneyString(currentItem.amount!!)
+        if (currentItem.amount > 0) {
             holder.itemView.amountTV.setTextColor(Color.parseColor("#00CD00"))
         } else {
             holder.itemView.amountTV.setTextColor(Color.parseColor("#CD0000"))

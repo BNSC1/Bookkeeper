@@ -124,7 +124,7 @@
                         android:id="@+id/amountET"
                         android:layout_width="168dp"
                         android:layout_height="wrap_content"
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         android:maxLength="15" />
 
                 </com.google.android.material.textfield.TextInputLayout>

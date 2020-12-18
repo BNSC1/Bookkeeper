@@ -11,13 +11,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.OffsetDateTime
 
+
 const val tablename = "EntryBook"
 
 @Entity(tableName = tablename)
 data class Entry(
     @PrimaryKey(autoGenerate = true) val _id: Int = 0,
     @ColumnInfo val description: String?,
-    @ColumnInfo val amount: Long?,
+    @ColumnInfo val amount: Double?,
 //    @ColumnInfo val date: Long?,
     @ColumnInfo val date: OffsetDateTime?
 )
@@ -34,7 +35,7 @@ interface EntryDao {
     fun readAllExpense(): LiveData<List<Entry>>
 
     @Query("Select TOTAL(amount) from `${tablename}`")
-    fun readBalance(): LiveData<Long>
+    fun readBalance(): LiveData<Double>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertEntry(entry: Entry)
@@ -43,7 +44,7 @@ interface EntryDao {
     suspend fun deleteEntry(entry: Entry)
 }
 
-@Database(entities = [Entry::class], version = 1, exportSchema = false)
+@Database(entities = [Entry::class], version = 2, exportSchema = false)
 @TypeConverters(DateConverter::class)
 abstract class EntryDB : RoomDatabase() {
     abstract fun entryDao(): EntryDao
@@ -71,9 +72,10 @@ abstract class EntryDB : RoomDatabase() {
 class EntryRepository(private val accountDao: EntryDao) {
 
     val readAllEntry: LiveData<List<Entry>> = accountDao.readAllEntry()
-//    val readAllRevenue: LiveData<List<Entry>> = accountDao.readAllRevenue()
+
+    //    val readAllRevenue: LiveData<List<Entry>> = accountDao.readAllRevenue()
 //    val readAllExpense: LiveData<List<Entry>> = accountDao.readAllExpense()
-    val readBalance: LiveData<Long> = accountDao.readBalance()
+    val readBalance: LiveData<Double> = accountDao.readBalance()
 //    fun readEntry(accountname: String, password: String): LiveData<List<Entry>> {
 //        return accountDao.readEntry(accountname, password)
 //    }
@@ -81,6 +83,7 @@ class EntryRepository(private val accountDao: EntryDao) {
     suspend fun insertEntry(entry: Entry) {
         accountDao.insertEntry(entry)
     }
+
     suspend fun deleteEntry(entry: Entry) {
         accountDao.deleteEntry(entry)
     }
@@ -90,7 +93,7 @@ class EntryRepository(private val accountDao: EntryDao) {
 class EntryVM(application: Application) : AndroidViewModel(application) {
 
     val readAllEntry: LiveData<List<Entry>>
-    val readBalance: LiveData<Long>
+    val readBalance: LiveData<Double>
     private val repository: EntryRepository
 
     init {
@@ -114,6 +117,7 @@ class EntryVM(application: Application) : AndroidViewModel(application) {
         }
         return true
     }
+
     fun deleteEntry(entry: Entry): Boolean {
 
         viewModelScope.launch(Dispatchers.IO) {

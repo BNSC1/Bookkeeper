@@ -39,6 +39,7 @@
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="btn_now">Now</string>
     <string name="btn_delete">Delete</string>
+    <string name="decimal_places_title">Decimal Places</string>
 
 
 </resources>

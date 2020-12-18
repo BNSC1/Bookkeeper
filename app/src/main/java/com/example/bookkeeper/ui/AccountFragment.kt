@@ -11,42 +11,33 @@ import com.example.bookkeeper.R
 import com.example.bookkeeper.databinding.FragmentAccountBinding
 import com.example.bookkeeper.model.EntryVM
 import com.example.bookkeeper.utils.ListAdapter
+import com.example.bookkeeper.utils.MoneyFormatHelper
 import kotlinx.android.synthetic.main.fragment_account.view.*
-import java.text.DecimalFormat
 
 class AccountFragment : Fragment() {
     private lateinit var entryVM: EntryVM
-
+    private lateinit var moneyFormatHelper: MoneyFormatHelper
     private var _binding: FragmentAccountBinding? = null
     private val binding get() = _binding!!
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         entryVM = ViewModelProvider(this).get(EntryVM::class.java)
-
+        moneyFormatHelper = MoneyFormatHelper(requireContext())
         _binding = FragmentAccountBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val adapter = ListAdapter(entryVM)
-        val recyclerView = view.recyclerview
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-
-        entryVM.readAllEntry.observe(viewLifecycleOwner, { entry ->
-            adapter.setData(entry)
-        })
-        setBalance()
-    }
-
-    private fun setBalance() {
+    private fun refreshBalance() {
         entryVM.readBalance.observe(viewLifecycleOwner, { balance ->
             binding.balanceTV.text =
-                getString(R.string.msg_balance, DecimalFormat("$#,###").format(balance))
+                getString(
+                    R.string.msg_balance,
+                    moneyFormatHelper.getPrefMoneyString(balance)
+                )
             if (balance < 0) {
                 binding.balanceTV.setTextColor(
                     resources.getColor(
@@ -65,4 +56,19 @@ class AccountFragment : Fragment() {
         })
     }
 
+    override fun onResume() {
+        super.onResume()
+        refreshEntries()
+        refreshBalance()
+    }
+
+    fun refreshEntries() {
+        val adapter = ListAdapter(entryVM)
+        val recyclerView = requireView().recyclerview
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        entryVM.readAllEntry.observe(viewLifecycleOwner, { entry ->
+            adapter.setData(entry)
+        })
+    }
 }

@@ -105,7 +105,7 @@ class BookkeepFragment : Fragment() {
                 if (binding.amountET.text.isNullOrEmpty()) binding.amountET.error =
                     getString(R.string.err_invalid)
             } else {
-                val amount = revenueFlag * binding.amountET.text.toString().toLong()
+                val amount = revenueFlag * binding.amountET.text.toString().toDouble()
                 val description = binding.descriptionET.text.toString()
                 entryVM.insertEntry(
                     Entry(

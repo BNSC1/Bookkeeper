@@ -1,9 +1,10 @@
-package com.example.bookkeeper
+package com.example.bookkeeper.ui
 
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceFragmentCompat
+import com.example.bookkeeper.R
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -29,4 +30,5 @@ class SettingsActivity : AppCompatActivity() {
         super.onBackPressed()
         return super.onOptionsItemSelected(item)
     }
+
 }

@@ -13,6 +13,6 @@
     </activity>
     <activity
         android:id="@+id/settingsActivity"
-        android:name="com.example.bookkeeper.SettingsActivity"
+        android:name="com.example.bookkeeper.ui.SettingsActivity"
         android:label="SettingsActivity" />
 </navigation>

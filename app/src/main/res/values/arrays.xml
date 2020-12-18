@@ -9,4 +9,20 @@
         <item>reply</item>
         <item>reply_all</item>
     </string-array>
+    <string-array name="decimal_places_entry">
+        <item>0 digits</item>
+        <item>1 digit</item>
+        <item>2 digits</item>
+        <item>3 digits</item>
+        <item>4 digits</item>
+        <item>5 digits</item>
+    </string-array>
+    <string-array name="decimal_places_value">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
 </resources>
