@@ -23,7 +23,7 @@ class AccountFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         entryVM = ViewModelProvider(this).get(EntryVM::class.java)
         moneyFormatHelper = MoneyFormatHelper(requireContext())
@@ -33,11 +33,11 @@ class AccountFragment : Fragment() {
 
     private fun refreshBalance() {
         entryVM.readBalance.observe(viewLifecycleOwner, { balance ->
-            binding.balanceTV.text =
-                getString(
-                    R.string.msg_balance,
-                    moneyFormatHelper.getPrefMoneyString(balance)
-                )
+            (getString(R.string.msg_balance) +
+                    getString(
+                        R.string.msg_balance_amount,
+                        moneyFormatHelper.getPrefMoneyString(balance)
+                    )).also { binding.balanceTV.text = it }
             if (balance < 0) {
                 binding.balanceTV.setTextColor(
                     resources.getColor(
@@ -54,6 +54,18 @@ class AccountFragment : Fragment() {
                 )
             }
         })
+        entryVM.readRevenue.observe(viewLifecycleOwner, { revenue ->
+            getString(
+                R.string.msg_balance_amount,
+                moneyFormatHelper.getPrefMoneyString(revenue)
+            ).also { binding.revenueAmountTV.text = it }
+        })
+        entryVM.readExpense.observe(viewLifecycleOwner, { expense ->
+            getString(
+                R.string.msg_balance_amount,
+                moneyFormatHelper.getPrefMoneyString(expense)
+            ).also { binding.expenseAmountTV.text = it }
+        })
     }
 
     override fun onResume() {
@@ -62,7 +74,7 @@ class AccountFragment : Fragment() {
         refreshBalance()
     }
 
-    fun refreshEntries() {
+    private fun refreshEntries() {
         val adapter = ListAdapter(entryVM)
         val recyclerView = requireView().recyclerview
         recyclerView.adapter = adapter

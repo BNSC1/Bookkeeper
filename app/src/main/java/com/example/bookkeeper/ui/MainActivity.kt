@@ -27,15 +27,15 @@ class MainActivity : AppCompatActivity() {
         ) { tab, position ->
             when (position) {
                 0 -> {
-                    tab.text = getString(R.string.tab_bookkeep)
+                    tab.text = getString(R.string.bookkeep)
                     tab.setIcon(R.drawable.ic_edit)
                 }
                 1 -> {
-                    tab.text = getString(R.string.tab_account)
+                    tab.text = getString(R.string.account)
                     tab.setIcon(R.drawable.ic_list)
                 }
                 else -> {
-                    tab.text = getString(R.string.tab_chart)
+                    tab.text = getString(R.string.chart)
                     tab.setIcon(R.drawable.ic_chart)
                 }
             }

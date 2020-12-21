@@ -20,7 +20,7 @@ data class Entry(
     @ColumnInfo val description: String?,
     @ColumnInfo val amount: Double?,
 //    @ColumnInfo val date: Long?,
-    @ColumnInfo val date: OffsetDateTime?
+    @ColumnInfo val date: OffsetDateTime?,
 )
 
 @Dao
@@ -28,11 +28,11 @@ interface EntryDao {
     @Query("Select * from `${tablename}` order by date desc, _id desc")
     fun readAllEntry(): LiveData<List<Entry>>
 
-    @Query("Select * from `${tablename}` where amount > 0 order by date desc")
-    fun readAllRevenue(): LiveData<List<Entry>>
+    @Query("Select TOTAL(amount) from `${tablename}` where amount > 0")
+    fun readRevenue(): LiveData<Double>
 
-    @Query("Select * from `${tablename}` where amount < 0 order by date desc")
-    fun readAllExpense(): LiveData<List<Entry>>
+    @Query("Select TOTAL(amount) from `${tablename}` where amount < 0")
+    fun readExpense(): LiveData<Double>
 
     @Query("Select TOTAL(amount) from `${tablename}`")
     fun readBalance(): LiveData<Double>
@@ -73,8 +73,8 @@ class EntryRepository(private val accountDao: EntryDao) {
 
     val readAllEntry: LiveData<List<Entry>> = accountDao.readAllEntry()
 
-    //    val readAllRevenue: LiveData<List<Entry>> = accountDao.readAllRevenue()
-//    val readAllExpense: LiveData<List<Entry>> = accountDao.readAllExpense()
+    val readRevenue: LiveData<Double> = accountDao.readRevenue()
+    val readExpense: LiveData<Double> = accountDao.readExpense()
     val readBalance: LiveData<Double> = accountDao.readBalance()
 //    fun readEntry(accountname: String, password: String): LiveData<List<Entry>> {
 //        return accountDao.readEntry(accountname, password)
@@ -94,6 +94,8 @@ class EntryVM(application: Application) : AndroidViewModel(application) {
 
     val readAllEntry: LiveData<List<Entry>>
     val readBalance: LiveData<Double>
+    val readRevenue: LiveData<Double>
+    val readExpense: LiveData<Double>
     private val repository: EntryRepository
 
     init {
@@ -101,6 +103,8 @@ class EntryVM(application: Application) : AndroidViewModel(application) {
         repository = EntryRepository(userDao)
         readAllEntry = repository.readAllEntry
         readBalance = repository.readBalance
+        readRevenue = repository.readRevenue
+        readExpense = repository.readExpense
     }
 
 //    fun readEntry(accountname: String, password: String): LiveData<List<Entry>> {

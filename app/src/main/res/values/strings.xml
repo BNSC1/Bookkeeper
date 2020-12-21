@@ -4,9 +4,9 @@
 
 
     <string name="menu_settings">Settings</string>
-    <string name="tab_bookkeep">Bookkeep</string>
-    <string name="tab_account">Account</string>
-    <string name="tab_chart">Chart</string>
+    <string name="bookkeep">Bookkeep</string>
+    <string name="account">Account</string>
+    <string name="chart">Chart</string>
 
     <!--Bookkeep Fragment-->
     <string name="hint_dollars">Dollars</string>
@@ -16,29 +16,20 @@
     <string name="hint_time">Time</string>
     <string name="item_expense">Expense(-)</string>
     <string name="item_revenue">Revenue(+)</string>
+    <string name="btn_now">Now</string>
     <string name="err_invalid">Invalid</string>
     <string name="msg_entry_unsuccessful">Please check marked fields.</string>
-    <string name="msg_entry_successful">Added entry</string>
+    <string name="msg_entry_successful">Added transaction</string>
 
-    <!--Account Fragment-->
-    <string name="msg_balance">Balance: %1$s</string>
-
-    <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
-
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
-
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
-    <string name="btn_now">Now</string>
+    <!--Transactions Fragment-->
+    <string name="msg_balance">Balance: </string>
+    <string name="msg_balance_amount">%1$s</string>
+    <string name="dialog_delete_title">Delete Transaction?</string>
+    <string name="dialog_delete_cancel">Cancel</string>
+    <string name="dialog_delete_confirm">Delete</string>
     <string name="btn_delete">Delete</string>
+
+    <!-- Preferences -->
     <string name="decimal_places_title">Decimal Places</string>
 
 
