@@ -14,9 +14,9 @@ class MoneyFormatHelper(context: Context) {
         if (decimalPlacement!=0){
             decimalString += "."
             for (i in 1..decimalPlacement) {
-                decimalString += "#"
+                decimalString += "0"
             }
         }
-        return DecimalFormat("$#,###$decimalString").format(amount)
+        return DecimalFormat("$#,##0$decimalString").format(amount)
     }
 }
