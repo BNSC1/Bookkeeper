@@ -1,10 +1,18 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-        <DropDownPreference
-            app:defaultValue="0"
-            app:entries="@array/decimal_places_entry"
-            app:entryValues="@array/decimal_places_value"
-            app:key="decimal_places"
-            app:title="@string/decimal_places_title"
-            app:useSimpleSummaryProvider="true" />
+    <DropDownPreference
+        app:defaultValue="0"
+        app:entries="@array/decimal_places_entry"
+        app:entryValues="@array/decimal_places_value"
+        app:key="decimal_places"
+        app:title="@string/decimal_places_title"
+        app:useSimpleSummaryProvider="true" />
+
+    <Preference
+        app:key="backup"
+        app:title="Backup Data"/>
+
+    <Preference
+        app:key="restore"
+        app:title="Restore Data"/>
 </PreferenceScreen>
