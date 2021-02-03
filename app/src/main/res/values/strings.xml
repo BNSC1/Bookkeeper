@@ -16,7 +16,7 @@
     <string name="hint_time">Time</string>
     <string name="item_expense">Expense(-)</string>
     <string name="item_revenue">Revenue(+)</string>
-    <string name="btn_now">Now</string>
+    <string name="btn_time_now">Now</string>
     <string name="err_invalid">Invalid</string>
     <string name="msg_entry_unsuccessful">Please check marked fields.</string>
     <string name="msg_entry_successful">Added transaction</string>
@@ -31,6 +31,8 @@
 
     <!-- Preferences -->
     <string name="decimal_places_title">Decimal Places</string>
+    <string name="msg_backup_success">Backup successful, the app will now restart.</string>
+    <string name="msg_restore_success">Restore successful, the app will now restart.</string>
 
 
 </resources>

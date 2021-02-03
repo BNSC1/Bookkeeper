@@ -6,46 +6,56 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import androidx.room.*
+import androidx.sqlite.db.SupportSQLiteQuery
+import com.example.bookkeeper.utils.BooleanConverter
 import com.example.bookkeeper.utils.DateConverter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.OffsetDateTime
 
 
-const val tablename = "EntryBook"
+const val tableName = "EntryBook"
 
-@Entity(tableName = tablename)
+@Entity(tableName = tableName)
 data class Entry(
     @PrimaryKey(autoGenerate = true) val _id: Int = 0,
     @ColumnInfo val description: String?,
     @ColumnInfo val amount: Double?,
-//    @ColumnInfo val date: Long?,
     @ColumnInfo val date: OffsetDateTime?,
 )
 
 @Dao
 interface EntryDao {
-    @Query("Select * from `${tablename}` order by date desc, _id desc")
+    @Query("Select * from `${tableName}` order by date desc, _id desc")
     fun readAllEntry(): LiveData<List<Entry>>
 
-    @Query("Select TOTAL(amount) from `${tablename}` where amount > 0")
+    @Query("Select TOTAL(amount) from `${tableName}` where amount > 0")
     fun readRevenue(): LiveData<Double>
 
-    @Query("Select TOTAL(amount) from `${tablename}` where amount < 0")
+    @Query("Select ABS(TOTAL(amount)) from `${tableName}` where amount < 0")
     fun readExpense(): LiveData<Double>
 
-    @Query("Select TOTAL(amount) from `${tablename}`")
+    @Query("Select TOTAL(amount) from `${tableName}`")
     fun readBalance(): LiveData<Double>
+
+    @Query("Select COUNT(*) from `${tableName}` where date between :startDate and :endDate limit 1")
+    fun hasDataYear(startDate: String, endDate: String): LiveData<Boolean>
+
+    @Query("Select SUM(amount) from `${tableName}` where date between :startDate and :endDate")
+    fun readMonthlyBalance(startDate: String, endDate: String): LiveData<Double?>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertEntry(entry: Entry)
 
     @Delete
     suspend fun deleteEntry(entry: Entry)
+
+    @RawQuery
+    fun checkpoint(supportSQLiteQuery: SupportSQLiteQuery?): Boolean
 }
 
 @Database(entities = [Entry::class], version = 2, exportSchema = false)
-@TypeConverters(DateConverter::class)
+@TypeConverters(DateConverter::class, BooleanConverter::class)
 abstract class EntryDB : RoomDatabase() {
     abstract fun entryDao(): EntryDao
 
@@ -61,7 +71,8 @@ abstract class EntryDB : RoomDatabase() {
                     context.applicationContext,
                     EntryDB::class.java,
                     "user_database"
-                ).build()
+                ).setJournalMode(JournalMode.TRUNCATE)
+                    .build()
                 INSTANCE = instance
                 return instance
             }
@@ -69,23 +80,32 @@ abstract class EntryDB : RoomDatabase() {
     }
 }
 
-class EntryRepository(private val accountDao: EntryDao) {
+class EntryRepository(private val entryDao: EntryDao) {
 
-    val readAllEntry: LiveData<List<Entry>> = accountDao.readAllEntry()
+    val readAllEntry: LiveData<List<Entry>> = entryDao.readAllEntry()
 
-    val readRevenue: LiveData<Double> = accountDao.readRevenue()
-    val readExpense: LiveData<Double> = accountDao.readExpense()
-    val readBalance: LiveData<Double> = accountDao.readBalance()
-//    fun readEntry(accountname: String, password: String): LiveData<List<Entry>> {
-//        return accountDao.readEntry(accountname, password)
-//    }
+    val readRevenue: LiveData<Double> = entryDao.readRevenue()
+    val readExpense: LiveData<Double> = entryDao.readExpense()
+    val readBalance: LiveData<Double> = entryDao.readBalance()
+
+    fun hasDataYear(startDate: String, endDate: String): LiveData<Boolean> {
+        return entryDao.hasDataYear(startDate, endDate)
+    }
+
+    fun readMonthlyBalance(startDate: String, endDate: String): LiveData<Double?> {
+        return entryDao.readMonthlyBalance(startDate, endDate)
+    }
 
     suspend fun insertEntry(entry: Entry) {
-        accountDao.insertEntry(entry)
+        entryDao.insertEntry(entry)
     }
 
     suspend fun deleteEntry(entry: Entry) {
-        accountDao.deleteEntry(entry)
+        entryDao.deleteEntry(entry)
+    }
+
+    fun checkpoint(query: SupportSQLiteQuery): Boolean {
+        return entryDao.checkpoint(query)
     }
 
 }
@@ -107,11 +127,13 @@ class EntryVM(application: Application) : AndroidViewModel(application) {
         readExpense = repository.readExpense
     }
 
-//    fun readEntry(accountname: String, password: String): LiveData<List<Entry>> {
-////        viewModelScope.launch(Dispatchers.IO) {
-//        Log.v("coroutine","run")
-//        return repository.readEntry(accountname, password)
-//    }
+    fun hasDataYear(startDate: String, endDate: String): LiveData<Boolean> {
+        return repository.hasDataYear(startDate, endDate)
+    }
+
+    fun readMonthlyBalance(startDate: String, endDate: String): LiveData<Double?> {
+        return repository.readMonthlyBalance(startDate, endDate)
+    }
 
     fun insertEntry(entry: Entry): Boolean {
 
@@ -127,6 +149,13 @@ class EntryVM(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteEntry(entry)
 
+        }
+        return true
+    }
+
+    fun checkpoint(query: SupportSQLiteQuery): Boolean {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.checkpoint(query)
         }
         return true
     }

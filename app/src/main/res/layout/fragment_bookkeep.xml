@@ -154,7 +154,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@string/btn_now"
+                android:text="@string/btn_time_now"
                 android:textAllCaps="true"
                 android:textColor="@color/design_default_color_primary"
                 android:textSize="20sp"
