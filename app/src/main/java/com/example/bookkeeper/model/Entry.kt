@@ -88,24 +88,12 @@ class EntryRepository(private val entryDao: EntryDao) {
     val readExpense: LiveData<Double> = entryDao.readExpense()
     val readBalance: LiveData<Double> = entryDao.readBalance()
 
-    fun hasDataYear(startDate: String, endDate: String): LiveData<Boolean> {
-        return entryDao.hasDataYear(startDate, endDate)
-    }
-
-    fun readMonthlyBalance(startDate: String, endDate: String): LiveData<Double?> {
-        return entryDao.readMonthlyBalance(startDate, endDate)
-    }
-
     suspend fun insertEntry(entry: Entry) {
         entryDao.insertEntry(entry)
     }
 
     suspend fun deleteEntry(entry: Entry) {
         entryDao.deleteEntry(entry)
-    }
-
-    fun checkpoint(query: SupportSQLiteQuery): Boolean {
-        return entryDao.checkpoint(query)
     }
 
 }
@@ -127,14 +115,6 @@ class EntryVM(application: Application) : AndroidViewModel(application) {
         readExpense = repository.readExpense
     }
 
-    fun hasDataYear(startDate: String, endDate: String): LiveData<Boolean> {
-        return repository.hasDataYear(startDate, endDate)
-    }
-
-    fun readMonthlyBalance(startDate: String, endDate: String): LiveData<Double?> {
-        return repository.readMonthlyBalance(startDate, endDate)
-    }
-
     fun insertEntry(entry: Entry): Boolean {
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -149,13 +129,6 @@ class EntryVM(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteEntry(entry)
 
-        }
-        return true
-    }
-
-    fun checkpoint(query: SupportSQLiteQuery): Boolean {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.checkpoint(query)
         }
         return true
     }
