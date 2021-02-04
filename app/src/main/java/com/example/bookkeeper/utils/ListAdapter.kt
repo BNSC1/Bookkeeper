@@ -15,10 +15,6 @@ import com.example.bookkeeper.model.EntryVM
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.list_item.view.*
 
-//class ListAdapter(
-//    itemList: LiveData<List<Entry>>,
-//    private val listener: EntryListItemClickNotify, private val entryVM: EntryVM
-//) :
 class ListAdapter(
     private val entryVM: EntryVM,
 ) :
